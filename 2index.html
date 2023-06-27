@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>標準差計算</title>
+    <style>
+        body {
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1em;
+        }
+
+        .input-section label {
+            font-size: 1em;
+            margin-bottom: 0.5em;
+        }
+
+        .input-section input {
+            font-size: 1em;
+            padding: 0.2em;
+            width: 400px;
+            height: 2em;
+            margin-bottom: 0.5em;
+        }
+
+        #result {
+            font-size: 1em;
+            margin-bottom: 1em;
+        }
+
+        #calculate-btn {
+            font-size: 1em;
+            padding: 0.2em 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>標準差計算</h1>
+    <div class="input-section">
+        <label for="large-scores">大分指數：</label>
+        <input type="text" id="large-scores" name="large-scores">
+    </div>
+    <div class="input-section">
+        <label for="small-scores">小分指數：</label>
+        <input type="text" id="small-scores" name="small-scores">
+    </div>
+    <button type="button" id="calculate-btn" onclick="calculateStandardDeviation()">計算</button>
+    <div id="result"></div>
+
+    <script>
+        function calculateStandardDeviation() {
+            var largeScoresInput = document.getElementById("large-scores");
+            var smallScoresInput = document.getElementById("small-scores");
+
+            var largeScores = parseScores(largeScoresInput.value);
+            var smallScores = parseScores(smallScoresInput.value);
+
+            // 計算大分指數的標準差
+            var largeStandardDeviation = calculateSD(largeScores);
+
+            // 計算小分指數的標準差
+            var smallStandardDeviation = calculateSD(smallScores);
+
+            // 計算大小指數的平均值
+            var largeAverage = calculateAverage(largeScores);
+            var smallAverage = calculateAverage(smallScores);
+
+            // 將計算結果呈現在結果區域
+            var resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "計算結果：<br>大分指數的標準差 = " + largeStandardDeviation.toFixed(4) + "<br>小分指數的標準差 = " + smallStandardDeviation.toFixed(4) + "<br>大分指數的平均值 = " + largeAverage.toFixed(4) + "<br>小分指數的平均值 = " + smallAverage.toFixed(4);
+        }
+
+        function parseScores(scoresInput) {
+            var scores = scoresInput.trim().split(/\s+/).map(Number);
+            return scores;
+        }
+
+        function calculateSD(scores) {
+            var sum = scores.reduce(function (acc, val) {
+                return acc + val;
+            }, 0);
+
+            var mean = sum / scores.length;
+
+            var squaredDiffSum = scores.reduce(function (acc, val) {
+                var diff = val - mean;
+                return acc + (diff * diff);
+            }, 0);
+
+            var variance = squaredDiffSum / scores.length;
+            var standardDeviation = Math.sqrt(variance);
+
+            return standardDeviation;
+        }
+
+        function calculateAverage(scores) {
+            var sum = scores.reduce(function (acc, val) {
+                return acc + val;
+            }, 0);
+
+            var average = sum / scores.length;
+
+            return average;
+        }
+    </script>
+</body>
+</html>
